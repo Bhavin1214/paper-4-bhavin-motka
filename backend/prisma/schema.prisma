@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String  @id @default(uuid()) @unique
+  email     String  @unique
+  name      String
+  password  String
+  blogs     Blog[]
+}
+
+model Blog {
+  id         String     @id @default(uuid()) @unique
+  title      String
+  content    String
+  image      String?
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   String
+  Category   Category   @relation(fields: [CategoryId], references: [id])
+  CategoryId String
+  tags       Tag[]
+  isDeleted  Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  version    Int        @default(1)
+}
+
+model Category {
+  id    String @id @default(uuid()) @unique
+  name  String @unique
+  blogs Blog[]
+}
+
+model Tag {
+  id    String @id @default(uuid()) @unique
+  name  String @unique
+  blogs Blog[]
+}
