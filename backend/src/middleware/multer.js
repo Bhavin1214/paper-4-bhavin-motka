@@ -1,44 +1,42 @@
 import multer from "multer";
-import fs from "fs";
+import fs from "fs"; 
 
-const allowedMimeTypes = [
-  "image/jpeg",
-  "image/png",
-  "image/jpg",
-  "application/pdf"
+const allowedMimeTypes =[
+    "image/jpeg",
+    "image/png",
+    "image/jpg",
+    "application/pdf"
 ];
 
-const upload = (folderName) => {
-  const uploadDir = `uploads/${folderName}/`;
+const uploadDir = 'uploads/images/';
 
-  if (!fs.existsSync(uploadDir)) {
+if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
-  }
+}
 
-  const storage = multer.diskStorage({
+const documentStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, uploadDir);
+        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-      cb(null, `${Date.now()}-${file.originalname}`);
-    }
-  });
+        cb(null, `${Date.now()}-${file.originalname}`);
+    },
+});
 
-  const fileFilter = (req, file, cb) => {
+const fileFilter = (req, file, cb) => {
     if (allowedMimeTypes.includes(file.mimetype)) {
-      cb(null, true);
+        cb(null, true);
     } else {
-      cb(new Error("INVALID_FILE_TYPE"), false);
+        cb(new Error("INVALID_FILE_TYPE"), false);
     }
-  };
+};
 
-  return multer({
-    storage,
+const upload = multer({
+    storage: documentStorage,
     fileFilter,
     limits: {
-      fileSize: 5 * 1024 * 1024
+        fileSize: 5 * 1024 * 1024
     }
-  });
-};
+});
 
 export default upload;

@@ -14,7 +14,8 @@ export const createBlog = async (req, res) => {
         }
 
         const { id } = req.user;
-        const existUser = prisma.user.findUnique({
+
+        const existUser = await prisma.user.findUnique({
             where: {
                 id: id
             }
@@ -25,9 +26,8 @@ export const createBlog = async (req, res) => {
             })
         }
         const { title, content, CategoryId, tags } = req.body;
-        console.log(req.file);
 
-        const images = req.file?.path || null;
+        const images = req.files?.images?.[0];
 
         const newBlog = await prisma.blog.create({
             data: {
@@ -36,11 +36,13 @@ export const createBlog = async (req, res) => {
                 author: {
                     connect: { id }
                 },
-                Category:{
-                    connect: { CategoryId }
+                Category: {
+                    connect: { id:CategoryId }
                 },
-                tags,
-                image: images,
+                tags: {
+                    connect: tags.map(tagId => ({ id: tagId }))
+                },
+                image: images.path,
             }
         })
 

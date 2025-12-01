@@ -24,10 +24,10 @@ model Blog {
   Category   Category   @relation(fields: [CategoryId], references: [id])
   CategoryId String
   tags       Tag[]
-  isDeleted  Boolean    @default(false)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  version    Int        @default(1)
+  isDeleted  Boolean?    @default(false)
+  createdAt  DateTime?   @default(now())
+  updatedAt  DateTime?   @updatedAt @default(now())
+  version    Int?        @default(1)
 }
 
 model Category {

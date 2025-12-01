@@ -1,11 +1,10 @@
-import nodemailer from 'nodemailer';
 import jwt from "jsonwebtoken"
 import GLOBALS from "../config/constants.js";
 
 const generateToken = (data) => {
     return jwt.sign(
         {
-            id: data._id,
+            id: data.id,
             email: data.email,
         },
         GLOBALS.JWT_SECRET,
@@ -20,7 +19,6 @@ const generateOTP = (length = 6) => {
 }
 
 export default {
-    send_email,
     generateOTP,
     generateToken,
 }

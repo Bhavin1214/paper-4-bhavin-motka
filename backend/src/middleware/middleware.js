@@ -25,6 +25,8 @@ export const customMiddleware = (req, res, next) => {
             return next();
         }
         req.user = validateHeaderToken(req);
+        console.log(req.user,"12345");
+        
         if (!req.user) {
             return sendApiResponse(
                 req, res,

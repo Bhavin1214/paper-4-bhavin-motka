@@ -4,6 +4,8 @@ import upload from "../../../middleware/multer.js";
 
 const router = express.Router();
 
-router.use("/createBlog",upload("images").single("images"),createBlog)
+router.use("/createBlog", upload.fields([
+    { name: "images", maxCount: 1 }
+]), createBlog)
 
 export default router
