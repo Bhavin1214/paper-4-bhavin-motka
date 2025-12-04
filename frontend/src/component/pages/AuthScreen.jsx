@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { AuthContext } from "../../utils/authcontext";
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -6,6 +7,7 @@ import { api } from "../../utils/fetchWrapper"
 
 
 const AuthScreen = ({ isOpen, type, onClose }) => {
+  const { login } = useContext(AuthContext);
 
   const [resError, setResError] = useState(null);
   const [resMessage, setResMessage] = useState(null)
@@ -40,22 +42,38 @@ const AuthScreen = ({ isOpen, type, onClose }) => {
   const submitHandler = async (data) => {
     if (type === "register") {
       const res = await api.post("/auth/register", data);
-        console.log(res);
+      console.log(res);
       if (res.Code === 200) {
         setResMessage(res.message)
-        localStorage.setItem("token", res.data?.token)
-        localStorage.setItem("email", res.data?.email)
+        setResError(null)
+        const token = res.data?.token
+        const email = res.data?.email
+        console.log(token, email);
+        login(token, email)
+        setTimeout(() => {
+          onClose()
+          setResMessage(null)
+        }, 2000);
       } else {
+        setResMessage(null)
         setResError(res.message || "something went wrong")
       }
-    }else{
+    } else {
       const res = await api.post("/auth/login", data);
-        console.log(res);
+      console.log(res);
       if (res.Code === 200) {
         setResMessage(res.message)
-        localStorage.setItem("token", res.data?.token)
-        localStorage.setItem("email", res.data?.email)
+        setResError(null)
+        const token = res.data.token
+        const email = res.data.email
+        login(token, email)
+        setTimeout(() => {
+          onClose()
+          setResMessage(null)
+        }, 2000);
+
       } else {
+        setResMessage(null)
         setResError(res.message || "something went wrong")
       }
     }
@@ -63,7 +81,7 @@ const AuthScreen = ({ isOpen, type, onClose }) => {
   }
   if (!isOpen) return null;
 
-  const onCloseHandler = ()=>{
+  const onCloseHandler = () => {
     setResError(null);
     setResMessage(null)
     onClose()

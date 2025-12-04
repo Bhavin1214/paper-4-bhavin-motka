@@ -12,13 +12,6 @@ const generateToken = (data) => {
     );
 };
 
-const generateOTP = (length = 6) => {
-    const OTP = Math.floor(10 ** (length - 1) + Math.random() * 9 * 10 ** (length - 1)).toString();
-    const expiresAt = new Date(Date.now() + 15 * 60 * 1000);
-    return { OTP, expiresAt }
-}
-
 export default {
-    generateOTP,
     generateToken,
 }

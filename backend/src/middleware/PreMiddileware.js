@@ -78,7 +78,6 @@ export const validateHeaderToken = (req) => {
         if (!token) return null;
 
         const decoded = jwt.verify(token, GLOBALS.JWT_SECRET);
-        // if (!isValidObjectId(decoded.id)) return null;
 
         return decoded;
     } catch (error) {

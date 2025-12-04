@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export const UseAuth = () => {
   const [isLoggedin, setIsLoggedin] = useState(false);
@@ -11,11 +11,8 @@ export const UseAuth = () => {
     if (token && user) {
       setIsLoggedin(true);
       setLoggedinUser(user);
-    } else {
-      setIsLoggedin(false);
-      setLoggedinUser(null);
     }
   }, []);
 
-  return { isLoggedin, loggedinUser };
+  return { isLoggedin, setIsLoggedin, loggedinUser, setLoggedinUser };
 };

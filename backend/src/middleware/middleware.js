@@ -19,13 +19,12 @@ export const customMiddleware = (req, res, next) => {
                 req.body = decryption(req.body);
             }
         }
-
-        const publicRoutes = ["/api/v1/auth/register","/api/v1/auth/login"];
+        
+        const publicRoutes = ["/api/v1/auth/register","/api/v1/auth/login","/api/v1/blogs/allBlog","/api/v1/blogs/getBlogById/:blogId","/api/v1/category/allCategories","/api/v1/tags/allTags"];
         if (publicRoutes.includes(req.path)) {
             return next();
         }
         req.user = validateHeaderToken(req);
-        console.log(req.user,"12345");
         
         if (!req.user) {
             return sendApiResponse(
